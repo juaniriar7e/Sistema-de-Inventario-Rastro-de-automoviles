@@ -50,5 +50,24 @@ class UsuarioController extends Controller
                 ->with('error', $e->getMessage());
         }
     }
+    
+    public function cambiarRol(Request $request, $id)
+    {
+        $request->validate([
+            'role' => 'required|in:admin,cliente', // agrega operador si existe
+        ]);
+
+        $usuario = \App\Models\User::findOrFail($id);
+
+        // Evita que el admin se quite su propio rol (opcional)
+        if (auth()->id() === $usuario->id && $request->role !== 'admin') {
+            return back()->with('error', 'No puedes quitarte el rol admin a ti mismo.');
+        }
+
+        $usuario->role = $request->role;
+        $usuario->save();
+
+        return back()->with('success', 'Rol actualizado correctamente.');
+    }
 }
 

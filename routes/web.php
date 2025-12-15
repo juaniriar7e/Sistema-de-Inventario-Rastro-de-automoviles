@@ -148,6 +148,10 @@ Route::middleware(['auth', 'admin', 'twofactor'])->group(function () {
     // Grupo /admin
     Route::prefix('admin')->name('admin.')->group(function () {
 
+        // CAMBIAR ROL DE USUARIO
+        Route::post('/usuarios/{id}/rol', [UsuarioController::class, 'cambiarRol'])
+            ->name('usuarios.cambiarRol');
+
         // EXPORTAR PARTES A EXCEL
         Route::get('/partes/exportar/excel', [ParteController::class, 'exportarExcel'])
             ->name('partes.export.excel');
